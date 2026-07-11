@@ -18,10 +18,13 @@
 <body class="bg-gradient-to-br from-pink-50 via-red-50 to-rose-100 text-slate-800 font-sans min-h-screen relative overflow-x-hidden selection:bg-rose-200 selection:text-rose-900">
 
     <!-- Floating Background Canvas for Particles -->
-    <canvas id="ambient-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+    <canvas id="ambient-canvas" class="fixed inset-0 pointer-events-none z-0 transition-opacity duration-1000"></canvas>
 
     <!-- Global Floating Hearts Container for JS-spawned CSS hearts -->
-    <div id="floating-hearts" class="fixed inset-0 pointer-events-none z-10 overflow-hidden"></div>
+    <div id="floating-hearts" class="fixed inset-0 pointer-events-none z-10 overflow-hidden transition-opacity duration-1000"></div>
+
+    <!-- Energy Sphere Fullscreen Canvas -->
+    <canvas id="energy-canvas" class="fixed inset-0 pointer-events-none z-30 hidden transition-opacity duration-1000"></canvas>
 
     <!-- Music Player Overlay Widget -->
     <div class="fixed top-4 right-4 z-50 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-rose-100 flex items-center space-x-3 transition-all duration-300 hover:scale-105">
@@ -230,7 +233,19 @@
             </div>
         </section>
 
-        <!-- ================= SCREEN 5: CELEBRATION ================= -->
+        <!-- ================= SCREEN 5: ENERGY SPHERE ================= -->
+        <section id="screen-energy-sphere" class="w-full hidden flex-col items-center justify-center transition-all duration-1000 opacity-0 scale-90 relative">
+            <div class="bg-white/10 backdrop-blur-sm p-8 rounded-3xl text-center max-w-2xl w-full relative z-40">
+                <h2 id="energy-text" class="font-serif text-3xl md:text-4xl text-white font-bold mb-8 tracking-tight drop-shadow-md">
+                    Storing energy from your heart and love and creating a huge sphere...
+                </h2>
+                <button id="btn-interact-sphere" class="hidden px-10 py-4 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 active:scale-95 transition-all duration-300 mx-auto">
+                    Interact ✨
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= SCREEN 6: CELEBRATION ================= -->
         <section id="screen-celebration" class="w-full hidden flex-col items-center justify-center transition-all duration-1000 opacity-0 scale-90">
             <!-- Fullscreen canvas for fireworks and heart confetti -->
             <canvas id="celebration-canvas" class="fixed inset-0 pointer-events-none z-30"></canvas>

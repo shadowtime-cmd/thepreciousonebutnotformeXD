@@ -166,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gallery: document.getElementById('screen-gallery'),
         letter: document.getElementById('screen-letter'),
         proposal: document.getElementById('screen-proposal'),
+        energySphere: document.getElementById('screen-energy-sphere'),
         celebration: document.getElementById('screen-celebration')
     };
 
@@ -463,6 +464,227 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    // --- ENERGY SPHERE LOGIC ---
+    function initEnergySphere() {
+        const energyCanvas = document.getElementById('energy-canvas');
+        const energyCtx = energyCanvas.getContext('2d');
+        const btnInteract = document.getElementById('btn-interact-sphere');
+        const energyText = document.getElementById('energy-text');
+
+        function resizeEnergyCanvas() {
+            energyCanvas.width = window.innerWidth;
+            energyCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeEnergyCanvas);
+        resizeEnergyCanvas();
+
+        let energyParticles = [];
+        let sphereRadius = 10;
+        let spherePhase = 'gathering'; // gathering, glowing, launching, exploded
+        let launchY = energyCanvas.height / 2;
+        let explosionParticles = [];
+
+        // Hide previous visual elements and show energy canvas
+        document.getElementById('ambient-canvas').classList.add('opacity-0');
+        document.getElementById('floating-hearts').classList.add('opacity-0');
+        energyCanvas.classList.remove('hidden');
+
+        // Change body gradient slowly to neon theme
+        document.body.style.transition = 'background 2s ease';
+        document.body.style.background = '#0f172a'; // Tailwind slate-900 equivalent inline
+
+        class EnergyParticle {
+            constructor() {
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * Math.max(energyCanvas.width, energyCanvas.height);
+                this.x = energyCanvas.width / 2 + Math.cos(angle) * distance;
+                this.y = energyCanvas.height / 2 + Math.sin(angle) * distance;
+                this.size = Math.random() * 3 + 1;
+                this.speed = Math.random() * 2 + 1;
+                // Start pink, eventually becomes blue/green near the center
+                this.color = Math.random() > 0.5 ? '#f43f5e' : '#ec4899';
+            }
+            update() {
+                const targetX = energyCanvas.width / 2;
+                const targetY = (spherePhase === 'launching') ? launchY : energyCanvas.height / 2;
+                const dx = targetX - this.x;
+                const dy = targetY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist > sphereRadius) {
+                    this.x += (dx / dist) * this.speed;
+                    this.y += (dy / dist) * this.speed;
+                } else if (spherePhase === 'gathering') {
+                    sphereRadius += 0.05;
+                }
+
+                // Color transition to neon blue/green as they get closer
+                if (dist < 150) {
+                    this.color = Math.random() > 0.5 ? '#0ea5e9' : '#22c55e'; // cyan and neon green
+                }
+            }
+            draw() {
+                energyCtx.beginPath();
+                energyCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                energyCtx.fillStyle = this.color;
+                energyCtx.fill();
+            }
+        }
+
+        class ExplosionParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 8 + 3;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 10 + 2;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.opacity = 1;
+                this.color = ['#0ea5e9', '#22c55e', '#38bdf8', '#4ade80'][Math.floor(Math.random() * 4)];
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.opacity -= 0.01;
+            }
+            draw() {
+                energyCtx.globalAlpha = Math.max(0, this.opacity);
+                energyCtx.beginPath();
+                energyCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                energyCtx.fillStyle = this.color;
+                energyCtx.fill();
+                energyCtx.globalAlpha = 1;
+            }
+        }
+
+        // Spawn initial gathering particles
+        for (let i = 0; i < 200; i++) {
+            energyParticles.push(new EnergyParticle());
+        }
+
+        setTimeout(() => {
+            btnInteract.classList.remove('hidden');
+            btnInteract.classList.add('flex', 'opacity-0');
+            setTimeout(() => { btnInteract.classList.remove('opacity-0'); }, 100);
+            spherePhase = 'glowing';
+        }, 3000);
+
+        btnInteract.addEventListener('click', () => {
+            btnInteract.classList.add('hidden');
+            energyText.classList.add('hidden');
+            spherePhase = 'launching';
+
+            const launchInterval = setInterval(() => {
+                launchY -= 15; // Launch up
+                if (launchY < -100) {
+                    clearInterval(launchInterval);
+                    spherePhase = 'exploded';
+                    // Explosion logic
+                    for(let i=0; i<300; i++) {
+                        explosionParticles.push(new ExplosionParticle(energyCanvas.width/2, energyCanvas.height * 0.2));
+                    }
+
+                    // Draw a big heart shape briefly
+                    setTimeout(() => {
+                        // Revert body background and restore previous visuals
+                        document.body.style.background = '';
+                        document.getElementById('ambient-canvas').classList.remove('opacity-0');
+                        document.getElementById('floating-hearts').classList.remove('opacity-0');
+                        energyCanvas.classList.add('hidden');
+                        energyAnimationActive = false; // Stop animation loop safely
+                        transitionTo(screens.energySphere, screens.celebration);
+
+                        // Fire confetti explosion from original yes button
+                        celebrationActive = true;
+                        spawnCelebShower();
+                        animateCelebration();
+
+                        setInterval(() => {
+                            if (celebrationActive) spawnCelebShower();
+                        }, 3500);
+
+                        spawnFloatingHearts(30);
+                    }, 2000);
+                }
+            }, 30);
+        });
+
+        let energyAnimationActive = true;
+
+        function animateEnergy() {
+            if (!energyAnimationActive) return;
+
+            energyCtx.fillStyle = 'rgba(15, 23, 42, 0.3)'; // slate-900 trail effect
+            energyCtx.fillRect(0, 0, energyCanvas.width, energyCanvas.height);
+
+            if (spherePhase !== 'exploded') {
+                if (spherePhase === 'gathering') {
+                    if (Math.random() < 0.5) energyParticles.push(new EnergyParticle());
+                }
+
+                // Draw central glowing sphere
+                const drawY = (spherePhase === 'launching') ? launchY : energyCanvas.height / 2;
+                const glow = energyCtx.createRadialGradient(
+                    energyCanvas.width/2, drawY, sphereRadius * 0.5,
+                    energyCanvas.width/2, drawY, sphereRadius * 2
+                );
+                // Transitions from pink to blue/green neon glow
+                const time = Date.now() * 0.002;
+                const gColor1 = `hsl(${190 + Math.sin(time)*20}, 90%, 60%)`; // Blue/cyan
+                const gColor2 = `hsl(${140 + Math.cos(time)*20}, 90%, 60%)`; // Green
+
+                glow.addColorStop(0, '#ffffff');
+                glow.addColorStop(0.5, gColor1);
+                glow.addColorStop(1, 'transparent');
+
+                energyCtx.beginPath();
+                energyCtx.arc(energyCanvas.width/2, drawY, sphereRadius * 2, 0, Math.PI*2);
+                energyCtx.fillStyle = glow;
+                energyCtx.fill();
+
+                if (spherePhase === 'glowing') {
+                    sphereRadius = 50 + Math.sin(Date.now() * 0.005) * 10; // Pulsing
+                }
+            }
+
+            energyParticles.forEach((p, idx) => {
+                p.update();
+                p.draw();
+            });
+
+            if (spherePhase === 'exploded') {
+                explosionParticles.forEach((p, idx) => {
+                    p.update();
+                    p.draw();
+                    if(p.opacity <= 0) explosionParticles.splice(idx, 1);
+                });
+
+                // Draw heart shape from particles
+                energyCtx.save();
+                energyCtx.translate(energyCanvas.width/2, energyCanvas.height * 0.2);
+                energyCtx.scale(4, 4); // Big heart
+                energyCtx.beginPath();
+                // Simple heart curve
+                energyCtx.moveTo(0, 0);
+                energyCtx.bezierCurveTo(-15, -15, -30, 0, -30, 30);
+                energyCtx.bezierCurveTo(-30, 60, -15, 75, 0, 90);
+                energyCtx.bezierCurveTo(15, 75, 30, 60, 30, 30);
+                energyCtx.bezierCurveTo(30, 0, 15, -15, 0, 0);
+                energyCtx.lineWidth = 2;
+                energyCtx.strokeStyle = '#0ea5e9'; // Blue glow
+                energyCtx.shadowBlur = 15;
+                energyCtx.shadowColor = '#22c55e'; // Green shadow
+                energyCtx.stroke();
+                energyCtx.restore();
+            }
+
+            requestAnimationFrame(animateEnergy);
+        }
+
+        animateEnergy();
+    }
+
+
     // --- FINAL ACCEPTANCE ACTION ---
     btnYes.addEventListener('click', () => {
         // Remove runaway "No" button entirely so it doesn't float around on celebration screen
@@ -473,21 +695,10 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleMusic();
         }
 
-        // Move to final celebration screen
-        transitionTo(screens.proposal, screens.celebration);
+        // Move to energy sphere screen
+        transitionTo(screens.proposal, screens.energySphere);
 
-        // Fire confetti explosion!
-        celebrationActive = true;
-        spawnCelebShower();
-        animateCelebration();
-
-        // Continuous shower
-        setInterval(() => {
-            if (celebrationActive) spawnCelebShower();
-        }, 3500);
-
-        // Spawn extra floating background hearts
-        spawnFloatingHearts(30);
+        initEnergySphere();
     });
 
 
