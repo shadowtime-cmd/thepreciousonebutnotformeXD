@@ -489,6 +489,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('floating-hearts').classList.add('opacity-0');
         energyCanvas.classList.remove('hidden');
 
+        // Show anime character
+        const animeChar = document.getElementById('anime-character');
+        animeChar.classList.remove('hidden');
+        setTimeout(() => animeChar.classList.remove('opacity-0'), 100);
+
         // Change body gradient slowly to neon theme
         document.body.style.transition = 'background 2s ease';
         document.body.style.background = '#0f172a'; // Tailwind slate-900 equivalent inline
@@ -591,6 +596,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.getElementById('ambient-canvas').classList.remove('opacity-0');
                         document.getElementById('floating-hearts').classList.remove('opacity-0');
                         energyCanvas.classList.add('hidden');
+
+                        // Hide anime character
+                        animeChar.classList.add('opacity-0');
+                        setTimeout(() => animeChar.classList.add('hidden'), 500);
+
                         energyAnimationActive = false; // Stop animation loop safely
                         transitionTo(screens.energySphere, screens.celebration);
 
