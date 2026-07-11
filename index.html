@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Precious One 💖</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display, Great Vibes, Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome for romantic icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-red-50 to-rose-100 text-slate-800 font-sans min-h-screen relative overflow-x-hidden selection:bg-rose-200 selection:text-rose-900">
+
+    <!-- Floating Background Canvas for Particles -->
+    <canvas id="ambient-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Global Floating Hearts Container for JS-spawned CSS hearts -->
+    <div id="floating-hearts" class="fixed inset-0 pointer-events-none z-10 overflow-hidden"></div>
+
+    <!-- Music Player Overlay Widget -->
+    <div class="fixed top-4 right-4 z-50 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-rose-100 flex items-center space-x-3 transition-all duration-300 hover:scale-105">
+        <button id="music-toggle" class="text-rose-500 hover:text-rose-600 focus:outline-none flex items-center justify-center w-8 h-8 rounded-full bg-rose-50">
+            <i id="music-icon" class="fa-solid fa-volume-xmark animate-pulse"></i>
+        </button>
+        <span class="text-xs font-semibold text-rose-700 tracking-wider">Sweet Symphony</span>
+        <!-- Audio Source (using a public royalty free romantic instrumental loop) -->
+        <audio id="romantic-music" loop>
+            <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" type="audio/wav">
+            <!-- Fallback cute synthesized audio will also be played via Web Audio API if browser blocks loading -->
+        </audio>
+    </div>
+
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <main class="relative z-20 min-h-screen flex flex-col items-center justify-center p-4 md:p-8 max-w-4xl mx-auto">
+
+        <!-- ================= SCREEN 1: THE WELCOME ENVELOPE ================= -->
+        <section id="screen-intro" class="w-full flex flex-col items-center justify-center transition-all duration-700 opacity-100 scale-100">
+            <div class="bg-white/70 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl border border-white/50 text-center max-w-lg w-full relative transform hover:scale-[1.02] transition-transform duration-500">
+                <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 bg-gradient-to-tr from-pink-400 to-rose-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                    <i class="fa-solid fa-heart text-white text-4xl animate-pulse"></i>
+                </div>
+
+                <h1 class="font-serif text-3xl md:text-4xl text-rose-800 font-bold mt-8 mb-4 tracking-tight">
+                    To the One Who Lights Up My World
+                </h1>
+                <p class="font-serif italic text-rose-600 text-lg mb-8">
+                    "In a universe of billions, my heart chose you."
+                </p>
+                <div class="border-t border-dashed border-rose-200 my-6"></div>
+                <p class="text-slate-600 leading-relaxed mb-8">
+                    I have built this space especially for you. A little corner of the digital universe to celebrate your beauty, your warmth, and the incredible joy you bring into my life.
+                </p>
+                <button id="btn-start" class="w-full md:w-auto bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 tracking-wide flex items-center justify-center space-x-3 mx-auto">
+                    <span>Open with Love</span>
+                    <i class="fa-solid fa-envelope-open-text animate-pulse"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= SCREEN 2: APPRECIATION GALLERY ================= -->
+        <section id="screen-gallery" class="w-full hidden flex-col items-center justify-center transition-all duration-700 opacity-0 scale-95">
+            <h2 class="font-serif text-3xl md:text-5xl text-rose-800 font-bold text-center mb-2 tracking-tight">
+                Appreciating Every Part of You
+            </h2>
+            <p class="font-serif italic text-rose-600 text-lg md:text-xl text-center mb-8 max-w-xl">
+                Click each card to reveal what makes my heart skip a beat...
+            </p>
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mb-10">
+                <!-- Card 1: Your Smile -->
+                <div class="appreciation-card group bg-white/75 backdrop-blur-sm rounded-2xl p-6 shadow-md hover:shadow-xl border border-rose-100 cursor-pointer transition-all duration-300 hover:-translate-y-1 flex flex-col items-center text-center relative overflow-hidden" data-target="smile">
+                    <div class="w-16 h-16 bg-rose-50 rounded-full flex items-center justify-center mb-4 text-rose-500 group-hover:bg-rose-500 group-hover:text-white transition-all duration-500">
+                        <i class="fa-regular fa-face-smile-beam text-3xl"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-rose-800 mb-2">Your Smile</h3>
+                    <p class="text-sm text-slate-500">The brightest light in my day</p>
+                    <div class="absolute bottom-2 right-4 text-rose-300 opacity-50 group-hover:opacity-100 transition-opacity">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Card 2: Your Eyes -->
+                <div class="appreciation-card group bg-white/75 backdrop-blur-sm rounded-2xl p-6 shadow-md hover:shadow-xl border border-rose-100 cursor-pointer transition-all duration-300 hover:-translate-y-1 flex flex-col items-center text-center relative overflow-hidden" data-target="eyes">
+                    <div class="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-4 text-pink-500 group-hover:bg-pink-500 group-hover:text-white transition-all duration-500">
+                        <i class="fa-regular fa-eye text-3xl"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-pink-800 mb-2">Your Eyes</h3>
+                    <p class="text-sm text-slate-500">Where I lose and find myself</p>
+                    <div class="absolute bottom-2 right-4 text-pink-300 opacity-50 group-hover:opacity-100 transition-opacity">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Card 3: Your Grace -->
+                <div class="appreciation-card group bg-white/75 backdrop-blur-sm rounded-2xl p-6 shadow-md hover:shadow-xl border border-rose-100 cursor-pointer transition-all duration-300 hover:-translate-y-1 flex flex-col items-center text-center relative overflow-hidden" data-target="grace">
+                    <div class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mb-4 text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-500">
+                        <i class="fa-solid fa-wand-magic-sparkles text-3xl"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-amber-800 mb-2">Your Grace</h3>
+                    <p class="text-sm text-slate-500">Elegant in every single move</p>
+                    <div class="absolute bottom-2 right-4 text-amber-300 opacity-50 group-hover:opacity-100 transition-opacity">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Card 4: Your Heart -->
+                <div class="appreciation-card group bg-white/75 backdrop-blur-sm rounded-2xl p-6 shadow-md hover:shadow-xl border border-rose-100 cursor-pointer transition-all duration-300 hover:-translate-y-1 flex flex-col items-center text-center relative overflow-hidden" data-target="heart">
+                    <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4 text-red-500 group-hover:bg-red-500 group-hover:text-white transition-all duration-500">
+                        <i class="fa-regular fa-heart text-3xl"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-red-800 mb-2">Your Soul</h3>
+                    <p class="text-sm text-slate-500">Compassionate, warm & beautiful</p>
+                    <div class="absolute bottom-2 right-4 text-red-300 opacity-50 group-hover:opacity-100 transition-opacity">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Interactive Details Modal/Overlay Container -->
+            <div id="card-overlay" class="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+                <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative transform scale-95 transition-transform duration-300 border border-rose-100">
+                    <button id="close-overlay" class="absolute top-4 right-4 text-slate-400 hover:text-rose-500 transition-colors w-8 h-8 flex items-center justify-center rounded-full bg-slate-50 hover:bg-rose-50">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                    <div id="overlay-icon-container" class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                        <i id="overlay-icon" class="text-4xl"></i>
+                    </div>
+                    <h4 id="overlay-title" class="font-serif text-2xl font-bold text-slate-800 text-center mb-4"></h4>
+                    <p id="overlay-description" class="text-slate-600 text-center leading-relaxed font-sans mb-6"></p>
+                    <div class="flex justify-center">
+                        <button id="close-overlay-btn" class="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2 rounded-full font-medium shadow-md transition-all hover:scale-105">
+                            Keep Exploring ✨
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Button (Enabled immediately or after checking some) -->
+            <button id="btn-to-letter" class="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 tracking-wide flex items-center space-x-3">
+                <span>Read My Letter</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </section>
+
+        <!-- ================= SCREEN 3: THE LOVE LETTER ================= -->
+        <section id="screen-letter" class="w-full hidden flex-col items-center justify-center transition-all duration-700 opacity-0 scale-95">
+            <div class="bg-amber-50/90 backdrop-blur-sm p-6 md:p-12 rounded-2xl shadow-xl border border-amber-100 max-w-2xl w-full relative overflow-hidden">
+                <!-- Ribbon decoration -->
+                <div class="absolute -top-12 -left-12 w-24 h-24 bg-rose-400/20 rounded-full"></div>
+                <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-pink-400/20 rounded-full"></div>
+
+                <h2 class="font-serif text-3xl md:text-4xl text-rose-900 font-bold text-center mb-6 border-b border-rose-200/60 pb-4">
+                    Dear Beautiful,
+                </h2>
+
+                <div class="space-y-6 font-serif text-slate-700 text-base md:text-lg leading-relaxed max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
+                    <p>
+                        From the moment you entered my life, everything started looking a bit brighter, warmer, and infinitely more beautiful. Your presence alone has this magical way of turning any ordinary day into an extraordinary adventure.
+                    </p>
+                    <p>
+                        I find myself constantly in awe of your exquisite kindness, the brilliance of your mind, and how effortlessly you spread joy to everyone around you. You are my calm in every storm, my smile in every quiet moment, and the sweetest thought that lingers in my mind.
+                    </p>
+                    <p>
+                        It is not just about how stunningly beautiful you are on the outside—though you truly take my breath away every single day. It is about the beauty of your gentle soul, your strength, and the way you make me want to be the best version of myself.
+                    </p>
+                    <p>
+                        They say that love is a journey, and if that is true, you are the only destination I ever want to reach. Every moment spent with you is a treasure I hold close to my heart.
+                    </p>
+                    <p class="italic text-rose-800 font-semibold text-right">
+                        With all my love, always.
+                    </p>
+                </div>
+
+                <div class="mt-8 border-t border-rose-200/60 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <button id="btn-back-to-gallery" class="text-rose-600 hover:text-rose-700 font-semibold flex items-center space-x-2 transition-all hover:scale-105">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Back to Gallery</span>
+                    </button>
+                    <button id="btn-to-proposal" class="w-full sm:w-auto bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 tracking-wide flex items-center justify-center space-x-3">
+                        <span>The Question</span>
+                        <i class="fa-solid fa-heart animate-pulse"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SCREEN 4: THE BIG PROPOSAL ================= -->
+        <section id="screen-proposal" class="w-full hidden flex-col items-center justify-center transition-all duration-700 opacity-0 scale-95 relative">
+            <div class="bg-white/70 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl border border-white/50 text-center max-w-xl w-full relative overflow-hidden">
+
+                <!-- Giant pulsing heart behind -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+                    <i class="fa-solid fa-heart text-[24rem] text-rose-500 animate-pulse"></i>
+                </div>
+
+                <div class="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-6 text-rose-500 shadow-inner">
+                    <i class="fa-solid fa-ring text-4xl animate-bounce"></i>
+                </div>
+
+                <h2 class="font-serif text-3xl md:text-5xl text-rose-800 font-extrabold mb-4 tracking-tight">
+                    Will You Be Mine?
+                </h2>
+
+                <p class="font-serif italic text-rose-600 text-lg md:text-xl mb-8">
+                    "I want to write all my tomorrows with you."
+                </p>
+
+                <p class="text-slate-600 leading-relaxed mb-10 max-w-md mx-auto">
+                    Through every season of life, in laughter and quiet times, I promise to cherish, respect, and love you with everything I have. Will you make me the happiest person in the universe?
+                </p>
+
+                <!-- Interactive Buttons Container -->
+                <div class="relative flex flex-col sm:flex-row items-center justify-center gap-6 min-h-[80px]" id="proposal-buttons-container">
+                    <button id="btn-yes" class="px-10 py-4 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 active:scale-95 transition-all duration-300 flex items-center space-x-2 z-10">
+                        <i class="fa-solid fa-heart"></i>
+                        <span>YES, absolutely! 💖</span>
+                    </button>
+
+                    <button id="btn-no" class="px-8 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-base rounded-full shadow transition-all duration-200 z-10 sm:relative">
+                        No 😢
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SCREEN 5: CELEBRATION ================= -->
+        <section id="screen-celebration" class="w-full hidden flex-col items-center justify-center transition-all duration-1000 opacity-0 scale-90">
+            <!-- Fullscreen canvas for fireworks and heart confetti -->
+            <canvas id="celebration-canvas" class="fixed inset-0 pointer-events-none z-30"></canvas>
+
+            <div class="bg-white/80 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl border border-rose-100 text-center max-w-2xl w-full relative z-40 overflow-hidden transform hover:scale-[1.01] transition-transform duration-500">
+
+                <!-- Polaroid Frame placeholder for her photo (dynamic and custom look) -->
+                <div class="relative w-48 h-56 bg-white p-3 pb-10 shadow-lg border border-slate-100 rotate-[-3deg] mx-auto mb-8 hover:rotate-0 transition-transform duration-500">
+                    <div class="w-full h-full bg-gradient-to-tr from-rose-100 via-pink-100 to-rose-200 rounded flex items-center justify-center overflow-hidden relative">
+                        <i class="fa-solid fa-crown text-4xl text-rose-400 animate-pulse"></i>
+                        <!-- Soft decorative floating hearts in polaroid -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="font-serif text-xs text-rose-500/50 mt-16 font-semibold">The Loveliest Queen</span>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-2 left-0 right-0 text-center font-serif text-sm text-slate-500 tracking-wider">
+                        My Whole Heart ❤️
+                    </div>
+                </div>
+
+                <h1 class="font-serif text-4xl md:text-6xl text-rose-800 font-extrabold mb-4 tracking-tight animate-pulse">
+                    She Said YES! 🎉
+                </h1>
+
+                <p class="font-serif text-2xl text-pink-600 italic mb-6">
+                    The happiest moment of my life!
+                </p>
+
+                <div class="border-t border-dashed border-rose-200 my-6"></div>
+
+                <p class="text-slate-700 text-lg leading-relaxed max-w-md mx-auto mb-8">
+                    Thank you for making my dream come true. From this moment on, we walk hand in hand into a beautiful future, filled with endless laughter, deep conversations, and unbounded love.
+                </p>
+
+                <!-- Sweet Virtual Music visualizer cassette / custom audio controls simulation -->
+                <div class="bg-rose-50/50 border border-rose-100 rounded-2xl p-4 max-w-sm mx-auto mb-6 flex items-center justify-between shadow-inner">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-rose-500 rounded-full flex items-center justify-center text-white animate-spin">
+                            <i class="fa-solid fa-compact-disc text-xl"></i>
+                        </div>
+                        <div class="text-left">
+                            <h5 class="text-sm font-semibold text-slate-700">Can't Help Falling in Love</h5>
+                            <p class="text-xs text-rose-500 font-medium">Romantic Instrumental</p>
+                        </div>
+                    </div>
+                    <!-- Virtual animated waveform -->
+                    <div class="flex items-end space-x-1 h-8">
+                        <span class="waveform-bar bg-rose-400 w-1 rounded-full"></span>
+                        <span class="waveform-bar bg-rose-500 w-1 rounded-full"></span>
+                        <span class="waveform-bar bg-rose-300 w-1 rounded-full"></span>
+                        <span class="waveform-bar bg-rose-600 w-1 rounded-full"></span>
+                        <span class="waveform-bar bg-rose-400 w-1 rounded-full"></span>
+                    </div>
+                </div>
+
+                <!-- Custom Love Notes Generator (Click to reveal a fresh promise) -->
+                <div class="mt-4">
+                    <button id="btn-promise" class="bg-rose-100 hover:bg-rose-200 text-rose-800 font-semibold text-sm px-6 py-3 rounded-full shadow-sm transition-all duration-300 hover:scale-105">
+                        💝 Click for a Lifetime Promise
+                    </button>
+                    <p id="promise-text" class="mt-4 font-serif text-rose-700 italic text-base min-h-[2.5rem] flex items-center justify-center transition-all duration-500"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Custom Javascript -->
+    <script src="script.js"></script>
+</body>
+</html>
