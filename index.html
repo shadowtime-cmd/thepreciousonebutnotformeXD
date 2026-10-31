@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Gunnu ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #09070d;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    padding: 25px;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    width: 450px;
+    height: 450px;
+    background: #a52d63;
+    filter: blur(180px);
+    opacity: .19;
+    top: -180px;
+    left: -150px;
+    pointer-events: none;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    background: #713c9c;
+    filter: blur(180px);
+    opacity: .17;
+    bottom: -180px;
+    right: -120px;
+    pointer-events: none;
+}
+
+.container {
+    width: 100%;
+    max-width: 540px;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 48px 30px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 25px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 100px rgba(0,0,0,.45);
+    animation: appear 1.2s ease;
+}
+
+@keyframes appear {
+    from {opacity: 0; transform: translateY(25px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.tag {
+    color: #d58eae;
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 35px;
+}
+
+.heart {
+    font-size: 43px;
+    display: inline-block;
+    animation: heartbeat 1.8s infinite;
+    filter: drop-shadow(0 0 15px #ff4f91);
+    margin-bottom: 23px;
+}
+
+@keyframes heartbeat {
+    0%, 100% {transform: scale(1);}
+    50% {transform: scale(1.18);}
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 9vw, 52px);
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 17px;
+}
+
+h1 span {
+    color: #e9a0bd;
+    font-style: italic;
+}
+
+.subtitle {
+    color: #aaa1ad;
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 38px;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    transition: .3s ease;
+}
+
+.primary {
+    background: linear-gradient(110deg,#d65d91,#a64d8b);
+    color: white;
+    border: none;
+    padding: 15px 32px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(214,93,145,.25);
+}
+
+.primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 35px rgba(214,93,145,.45);
+}
+
+#confession {
+    display: none;
+    animation: appear 1s ease;
+}
+
+.message {
+    font-family: 'Playfair Display', serif;
+    color: #e9dce5;
+    font-size: 18px;
+    line-height: 1.9;
+    margin: 25px 0;
+    min-height: 130px;
+}
+
+.name {
+    color: #f0a2c1;
+    font-style: italic;
+}
+
+.question {
+    font-family: 'Playfair Display', serif;
+    font-size: 25px;
+    margin: 30px 0 25px;
+}
+
+.choices {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    max-width: 280px;
+    margin: auto;
+}
+
+.yes {
+    background: #d65d91;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 30px;
+    font-size: 14px;
+}
+
+.time {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.2);
+    color: #d8cbd5;
+    padding: 15px;
+    border-radius: 30px;
+    font-size: 14px;
+}
+
+.yes:hover, .time:hover {
+    transform: translateY(-3px);
+}
+
+.response {
+    display: none;
+    animation: appear 1s ease;
+    margin-top: 25px;
+}
+
+.response h2 {
+    font-family: 'Playfair Display', serif;
+    color: #f0a2c1;
+    font-size: 29px;
+    margin-bottom: 15px;
+}
+
+.response p {
+    color: #c9bdc9;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.footer {
+    margin-top: 40px;
+    font-size: 10px;
+    color: #746a78;
+    letter-spacing: 2px;
+}
+
+.particle {
+    position: fixed;
+    bottom: -30px;
+    color: #e98bb2;
+    opacity: 0;
+    pointer-events: none;
+    animation: float 9s linear infinite;
+}
+
+@keyframes float {
+    0% {transform: translateY(0) rotate(0deg); opacity: 0;}
+    15% {opacity: .5;}
+    85% {opacity: .4;}
+    100% {transform: translateY(-110vh) rotate(35deg); opacity: 0;}
+}
+
+@media(max-width:480px) {
+    .container {padding: 40px 22px;}
+    .message {font-size: 17px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="tag">A little something special</div>
+
+    <div class="heart">♡</div>
+
+    <div id="opening">
+        <h1>Hey, <span>Gunnu.</span></h1>
+        <p class="subtitle">There's something I've been wanting to tell you...</p>
+        <button class="primary" onclick="openLetter()">
+            Open this little surprise ✨
+        </button>
+    </div>
+
+    <div id="confession">
+        <h1>Just for <span>You.</span></h1>
+
+        <div class="message" id="typed"></div>
+
+        <p class="question">
+            So... would you give us a chance? ♡
+        </p>
+
+        <div class="choices">
+            <button class="yes" onclick="answer('yes')">
+                Yes, I feel the same ❤️
+            </button>
+
+            <button class="time" onclick="answer('time')">
+                I need some time 🌷
+            </button>
+        </div>
+    </div>
+
+    <div class="response" id="response">
+        <h2 id="responseTitle"></h2>
+        <p id="responseText"></p>
+    </div>
+
+    <div class="footer">MADE WITH A LITTLE COURAGE ♡</div>
+
+</div>
+
+<script>
+const confession =
+"Hey Gunnu,\n\nI don't really know how to put this into perfect words, but I wanted to be honest with you.\n\nSomehow, you've become someone special to me. Your presence makes ordinary moments feel a little more beautiful.\n\nI don't want to make any promises I cannot keep. I just want you to know that I genuinely like you, and I'd love to get to know you even better.\n\nNo pressure. Just something my heart wanted you to know. ❤️";
+
+function openLetter() {
+    document.getElementById("opening").style.display = "none";
+    document.getElementById("confession").style.display = "block";
+
+    const text = document.getElementById("typed");
+    let i = 0;
+
+    function type() {
+        if (i < confession.length) {
+            text.innerHTML +=
+                confession[i] === "\n" ? "<br>" :
+                confession[i] === " " ? "&nbsp;" :
+                confession[i];
+            i++;
+            setTimeout(type, 32);
+        }
+    }
+    type();
+}
+
+function answer(choice) {
+    document.querySelector(".question").style.display = "none";
+    document.querySelector(".choices").style.display = "none";
+
+    const response = document.getElementById("response");
+    const title = document.getElementById("responseTitle");
+    const text = document.getElementById("responseText");
+
+    response.style.display = "block";
+
+    if (choice === "yes") {
+        title.innerHTML = "You made my day! ❤️";
+        text.innerHTML =
+            "I don't even know what to say... Thank you, Gunnu. Here's to a beautiful new beginning. ✨";
+        celebrate();
+    } else {
+        title.innerHTML = "That's completely okay. 🌷";
+        text.innerHTML =
+            "Take all the time you need, Gunnu. Your feelings matter, and I'll respect whatever you decide.";
+    }
+}
+
+function celebrate() {
+    for (let i = 0; i < 35; i++) {
+        setTimeout(() => {
+            const heart = document.createElement("div");
+            heart.innerHTML = ["♡","♥","✧","💕"][Math.floor(Math.random()*4)];
+            heart.style.position = "fixed";
+            heart.style.left = Math.random()*100 + "vw";
+            heart.style.top = "-30px";
+            heart.style.color = "#f18ab6";
+            heart.style.fontSize = (15+Math.random()*20)+"px";
+            heart.style.zIndex = "10";
+            heart.style.pointerEvents = "none";
+            document.body.appendChild(heart);
+
+            heart.animate([
+                {transform:"translateY(0) rotate(0deg)",opacity:1},
+                {transform:"translateY(100vh) rotate(360deg)",opacity:0}
+            ], {
+                duration: 3500+Math.random()*2000
+            }).onfinish = () => heart.remove();
+        }, i*100);
+    }
+}
+
+// Floating background particles
+setInterval(() => {
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.innerHTML = Math.random() > .5 ? "♡" : "✧";
+    p.style.left = Math.random()*100 + "vw";
+    p.style.fontSize = (12+Math.random()*18)+"px";
+    p.style.animationDuration = (7+Math.random()*7)+"s";
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 15000);
+}, 800);
+</script>
+
+</body>
+</html>
